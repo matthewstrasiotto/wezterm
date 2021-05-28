@@ -288,6 +288,38 @@ impl ParsedConfigFile {
 
         needs_reparse
     }
+
+    /// Process Includes
+    /// Include: 
+    /// Include the specified configuration file(s). Multiple path names may be
+    /// specified and each pathname may contain glob wildcards and shell-like
+    /// "~" references to user home directories.
+    /// Files without absolute paths are assumed to be in ~/.ssh. 
+    /// 
+    /// (WILL NOT IMPLEMENT):
+    /// An Include directive may appear inside a Match or Host block to perform conditional inclusion.
+    fn process_include(&self, path : &str) {
+        let parts = match path.chars().next() {
+            some(c) => path.split_at(c.len_utf8()),
+            None => s.split_at(0),
+        };
+
+        let first_char = parts[0];
+
+        match first_char.as_str() {
+            // Finish me later
+        }
+        if (let Some(first_char) = path.chars().next()) {
+            match first_char.as_str() {
+                "~" => {
+                    
+                }
+            } 
+        }
+
+        
+
+    }
 }
 
 /// A context for resolving configuration values.
