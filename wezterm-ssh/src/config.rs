@@ -2,6 +2,7 @@
 use regex::{Captures, Regex};
 use std::collections::BTreeMap;
 use std::path::Path;
+use std::collections::HashSet;
 
 pub type ConfigMap = BTreeMap<String, String>;
 
@@ -131,12 +132,13 @@ impl MatchGroup {
 /// Holds the ordered set of parsed options.
 /// The config file semantics are that the first matching value
 /// for a given option takes precedence
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
 struct ParsedConfigFile {
     /// options that appeared before any `Host` stanza
     options: ConfigMap,
     /// options inside a `Host` stanza
     groups: Vec<MatchGroup>,
+    includes: HashSet<Path>, 
 }
 
 impl ParsedConfigFile {
@@ -278,7 +280,7 @@ impl ParsedConfigFile {
                 needs_reparse = true;
             }
             if group.is_match(hostname, user, local_user, context) {
-                for (k, v) in &group.options {
+                for (k, v) in &group.options {use std::collections::HashSet;
                     target.entry(k.to_string()).or_insert_with(|| v.to_string());
                 }
             }
@@ -293,7 +295,7 @@ impl ParsedConfigFile {
 /// as well as the set of configs that should be consulted.
 #[derive(Debug, Clone)]
 pub struct Config {
-    config_files: Vec<ParsedConfigFile>,
+    config_files: HashSet<ParsedConfigFile>,
     options: ConfigMap,
     tokens: ConfigMap,
     environment: Option<ConfigMap>,
