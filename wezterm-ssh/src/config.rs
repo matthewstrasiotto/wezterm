@@ -323,7 +323,7 @@ impl ParsedConfigFile {
 
             for entry in glob::glob(resolved_path) {
                 match entry {
-                    Ok(path) => &self.includes.insert(path.to_str()),
+                    Ok(path) => &self.includes.insert(path),
                     Err(e) => println!("{:?}", e),
                 }
             }
