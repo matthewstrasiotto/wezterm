@@ -303,18 +303,30 @@ impl ParsedConfigFile {
             some(c) => path.split_at(c.len_utf8()),
             None => s.split_at(0),
         };
+        
+        if (parts) {
+            let first_char = parts[0];
+            let most_chars = parts[1];
 
-        let first_char = parts[0];
-
-        match first_char.as_str() {
-            // Finish me later
-        }
-        if (let Some(first_char) = path.chars().next()) {
-            match first_char.as_str() {
+            let Some(resolved_path) = match first_char.as_str() {
+                // Finish me later
                 "~" => {
-                    
+                    dirs_next::home_dir().join(most_chars);
                 }
-            } 
+                "/" => {
+                    path.as_str();
+                }
+                _ => {
+                    dirs_next::home_dir().join(".ssh").join(most_chars);
+                },
+            };
+
+            for entry in glob::glob(resolved_path) {
+                match entry {
+                    Ok(path) => &self.includes.insert(path.to_str()),
+                    Err(e) => println!("{:?}", e),
+                }
+            }
         }
 
         
