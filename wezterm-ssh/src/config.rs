@@ -309,7 +309,7 @@ impl ParsedConfigFile {
             let most_chars = parts[1];
 
             let Some(resolved_path) = match first_char.as_str() {
-                // Finish me later
+                // Probably need a resolve_home, but idk how to access that context
                 "~" => {
                     dirs_next::home_dir().join(most_chars);
                 }
